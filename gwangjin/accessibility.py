@@ -22,20 +22,23 @@ def haversine(lat1: float, lng1: float, lat2: float, lng2: float):
 def calculate_parking_scores(
     poi_df: pd.DataFrame, parking_df: pd.DataFrame, child_walking_speed_mps: float, min_distance_m: float = 1.0
 ) -> pd.DataFrame:
-    """
-    Calculates parking convenience scores for points of interest (POIs)
-    based on nearby parking lots' n_parkings and distance.
+    """Calculate parking scores for each POI based on the number of parking lots
 
-    Args:
-        poi_df: DataFrame with POI locations, must have 'lat' and 'lng' columns.
-        parking_df: DataFrame with parking lot locations and n_parkings,
-                    must have 'lat', 'lng', and 'n_parkings' columns.
-        child_walking_speed_mps: Child's walking speed in meters per second.
-        min_distance_m: Minimum distance to use in calculation to avoid
-                        division by zero or near-zero. Defaults to 1.0 meter.
+    Parameters
+    ----------
+    poi_df
+        pandas DataFrame containing points of interest (POIs) with 'lat' and 'lng' columns
+    parking_df
+        pandas DataFrame containing parking lots with 'lat', 'lng', and 'n_parkings' columns
+    child_walking_speed_mps
+        walking speed of a child in meters per second
+    min_distance_m, optional
+        minimum distance in meters to consider a parking lot, by default 1.0
 
-    Returns:
-        DataFrame: The original poi_df with an added 'ParkingScore' column (0-100).
+    Returns
+    -------
+    pandas DataFrame
+        DataFrame containing the original POI data with an additional 'parking_score' column
     """
     if not all(col in poi_df.columns for col in ["lat", "lng"]):
         raise ValueError("poi_df must contain 'lat' and 'lng' columns.")

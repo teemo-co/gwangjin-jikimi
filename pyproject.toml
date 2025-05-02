@@ -1,0 +1,168 @@
+[build-system]
+requires = ["poetry-core>=2.0.0", "poetry-dynamic-versioning>=1.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[project]
+name = "gwangjin"
+description = "A minimalistic Python project template."
+dynamic = ["version", "dependencies"]  # we need poetry-specific dependencies features, like with, without, only, etc.
+license = { text = "Proprietary"}
+authors = [{name = "Bionsight", email = "<dev@bionsight.com>"}]
+maintainers = []
+readme = "README.md"
+keywords = []
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Developers',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Typing :: Typed',
+]
+requires-python = ">=3.9,<4.0"
+
+
+[tool.poetry]
+packages = [
+  { include = "gwangjin" }
+]
+include = ["CHANGELOG.md"]
+version = "0.0.0"  # This will be replaced by poetry-dynamic-versioning
+
+[tool.poetry.requires-plugins]
+poetry-dynamic-versioning = { version = ">=1.0.0,<2.0.0", extras = ["plugin"] }
+
+[tool.poetry.dependencies]
+loguru = "*"
+numpy = "*"
+pandas = "*"
+python = "^3.12"
+jupyter = "^1.1.1"
+
+[tool.poetry.group.dev.dependencies]
+coverage = {extras = ["toml"], version = "^7.3.1"}
+pandas-stubs = "*"
+pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
+pytest-github-actions-annotate-failures = "*"
+
+[tool.poetry.group.docs.dependencies]
+myst_parser = "*"
+sphinx = "*"
+sphinx_rtd_theme = "*"
+gitpython = "^3"
+sphinx-copybutton = "*"
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+
+[tool.black]
+line-length = 120
+target-version = ['py39']
+include = '\.pyi?$'
+preview = true
+extend-exclude = '''
+/(
+  # The following are specific to Black, you probably don't want those.
+    \.git
+  | \.hg
+  | \.mypy_cache
+)/
+'''
+
+[tool.codespell]
+skip = 'poetry.lock,'
+
+[tool.coverage.paths]
+source = ["gwangjin"]
+
+[tool.coverage.run]
+parallel = true
+branch = true
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+skip_covered = true
+exclude_lines = [
+    "pragma: no cover",
+    # PyPy is unacceptably slow under coverage.
+    "if PYPY:",
+]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 120
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_untyped_defs = false
+disallow_any_unimported = true
+ignore_missing_imports = true
+no_implicit_optional = true
+pretty = true
+show_error_codes = true
+warn_return_any = true
+warn_unused_ignores = true
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+extraPaths = ["tests/"]
+reportMissingImports = false
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+fix = true
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    # flake8-2020
+    "YTT",
+    # flake8-bandit
+    "S",
+    # flake8-bugbear
+    "B",
+    # flake8-builtins
+    "A",
+    # flake8-comprehensions
+    "C4",
+    # flake8-debugger
+    "T10",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # mccabe
+    "C90",
+    # pycodestyle
+    "E", "W",
+    # pyflakes
+    "F",
+    # pygrep-hooks
+    "PGH",
+    # pyupgrade
+    "UP",
+    # ruff
+    "RUF",
+    # tryceratops
+    "TRY",
+]
+ignore = [
+    # LineTooLong
+    "E501",
+    # DoNotAssignLambda
+    "E731",
+    # UnspecificExcept
+    "TRY003",
+]
+per-file-ignores = {"tests/*" = ["S101"]}
+pep8-naming = {staticmethod-decorators = ["pydantic.validator", "pydantic.root_validator"]}
+pydocstyle = {convention = "numpy"}
